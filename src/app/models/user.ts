@@ -1,3 +1,5 @@
+import { string } from 'yup';
+
 export interface IUserModel {
   _id: string;
   fullName: string;
@@ -46,3 +48,8 @@ export const userLoginInitialValue: ILogin = {
   email: '',
   password: '',
 };
+
+export type CoordinateType = {
+  latitude: number;
+  longitude: number;
+} | null;

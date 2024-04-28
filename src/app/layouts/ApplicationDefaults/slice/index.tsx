@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '../../../../utils/@reduxjs/toolkit';
-import {
-  useInjectReducer,
-  useInjectSaga,
-} from '../../../../utils/redux-injectors';
-import { applicationsDefaultSaga } from './saga';
+
 import { ApplicationsDefaultState, IAppMessageConfig } from './types';
 
 export const initialState: ApplicationsDefaultState = {
   appMessage: undefined,
 };
 
-const slice = createSlice({
+const sliceDefaultLayout = createSlice({
   name: 'applicationsDefault',
   initialState,
   reducers: {
@@ -25,10 +21,6 @@ const slice = createSlice({
   },
 });
 
-export const { actions: applicationsDefaultActions } = slice;
+export const { hideAppMessage, setAppMessage } = sliceDefaultLayout.actions;
 
-export const useApplicationsDefaultSlice = () => {
-  useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: applicationsDefaultSaga });
-  return { actions: slice.actions };
-};
+export default sliceDefaultLayout.reducer;

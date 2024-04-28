@@ -1,7 +1,8 @@
-export interface FormInputProps {
+import { TextInputProps } from 'react-native';
+
+export interface FormInputProps extends TextInputProps {
   label: string;
   onChangeText: (text: string) => void;
-  onBlur: () => void;
-  value: string;
+  value: string | undefined;
   placeholder: string;
 }

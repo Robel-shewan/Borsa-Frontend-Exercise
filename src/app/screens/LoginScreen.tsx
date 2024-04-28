@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,9 +11,26 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { lightTheme } from '../../utils/theme/lightTheme';
 import Icon from 'react-native-vector-icons/Feather';
+import { Formik } from 'formik';
+import FormInput from '../components/custom/FormInput';
+import { ILogin, userLoginInitialValue } from '../models/user';
+import { userLoginValidationSchema } from '../../utils/validation';
+import { actions } from './User/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLogin, selectUser } from './User/slice/selectors';
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const user = useSelector(selectUser);
+  const isLogin = useSelector(selectIsLogin);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLogin && user?.token) {
+      navigation.navigate('Root');
+    }
+  }, [isLogin, user]);
 
   return (
     <View style={styles.container}>
@@ -24,7 +41,6 @@ export default function LoginScreen() {
             style={styles.backButton}
           >
             <Icon name="arrow-left" size={20} color="black" />
-            {/* <ArrowLeftIcon size={20} color="black" /> */}
           </TouchableOpacity>
         </View>
         <View style={styles.imageContainer}>
@@ -34,39 +50,71 @@ export default function LoginScreen() {
           />
         </View>
       </SafeAreaView>
-      <View style={styles.formContainer}>
-        <View style={styles.form}>
-          <Text style={styles.label}>Email Address</Text>
-          <TextInput style={styles.input} placeholder="Email" />
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry
-            placeholder="Password"
-          />
-          <TouchableOpacity>
-            <Text style={styles.forgotPassword}>Forgot Password?</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.loginButton}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.orText}>Or</Text>
-        <View style={styles.socialButtonsContainer}>
-          <TouchableOpacity style={styles.socialButton}>
-            <Image
-              source={require('../../assets/images/google.png')}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.signUpContainer}>
-          <Text style={styles.signUpText}>Don't have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={[styles.signUpText, styles.signUpLink]}> Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Formik
+        initialValues={userLoginInitialValue}
+        validationSchema={userLoginValidationSchema}
+        onSubmit={(values: ILogin) => {
+          dispatch(actions.loginUser(values));
+        }}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          touched,
+          errors,
+          values,
+          setFieldValue,
+          isSubmitting,
+        }) => (
+          <View style={styles.formContainer}>
+            <View style={styles.form}>
+              <FormInput
+                label="Email Address"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email') as any}
+                value={values.email}
+                placeholder="Enter Email Address"
+              />
+              {touched.email && errors.email && (
+                <Text style={styles.error}>{errors.email}</Text>
+              )}
+
+              <FormInput
+                label="password"
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password') as any}
+                value={values.password}
+                secureTextEntry
+                placeholder="Enter Password"
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+
+              <TouchableOpacity>
+                <Text style={styles.forgotPassword}>Forgot Password?</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.loginButton}
+                onPress={() => handleSubmit()}
+              >
+                <Text style={styles.loginText}>Login</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.signUpContainer}>
+              <Text style={styles.signUpText}>Don't have an account?</Text>
+              <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+                <Text style={[styles.signUpText, styles.signUpLink]}>
+                  {' '}
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Formik>
     </View>
   );
 }
@@ -95,6 +143,12 @@ const styles = StyleSheet.create({
   image: {
     width: 220,
     height: 200,
+  },
+  error: {
+    color: 'red',
+    fontSize: 14,
+    marginLeft: 20,
+    marginTop: -10,
   },
   formContainer: {
     flex: 1,
@@ -158,7 +212,7 @@ const styles = StyleSheet.create({
   signUpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 5,
   },
   signUpText: {
     color: 'gray',

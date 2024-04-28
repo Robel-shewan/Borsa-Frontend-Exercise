@@ -6,6 +6,7 @@ import Navigation from '../../navigation';
 import { ThemeProvider } from 'styled-components/native';
 
 import { useSelector } from 'react-redux';
+import { ApplicationDefaults } from '../../layouts/';
 
 export default function DefaultLayout() {
   const isLoadingComplete = useCachedResources();
@@ -14,6 +15,7 @@ export default function DefaultLayout() {
   } else {
     return (
       <>
+        <ApplicationDefaults />
         <Navigation colorScheme={'light'} />
         <StatusBar />
       </>

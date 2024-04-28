@@ -28,19 +28,16 @@ const makeCall = async (config: IAPICallConfig) => {
       headers: header as AxiosRequestHeaders,
       responseType: config.responseType || 'json',
     });
-    console.log('response ', response);
 
-    if (response.status === 200 && config.returnCleanResponse) {
-      return response;
-    } else if (response.status === 200) {
+    if (response.status === 200 || 201) {
       return response.data;
     } else {
       throw new APIError(response.status, response.data?.message);
     }
   } catch (error: any) {
-    console.log('erros', error);
     if (error?.response) {
       const { response } = error;
+
       if (
         config.isSecureRoute &&
         typeof refereshToken === 'string' &&
@@ -48,12 +45,6 @@ const makeCall = async (config: IAPICallConfig) => {
         authToken &&
         !config.dontRefresh
       ) {
-        try {
-          // return handleTokenReferesh(config, refereshToken);
-          // eslint-disable-next-line no-catch-shadow
-        } catch (error) {
-          if (error instanceof APIError) throw error;
-        }
       } else if (error instanceof APIError) throw error;
       else throw new APIError(response?.status, response.data?.message);
     }

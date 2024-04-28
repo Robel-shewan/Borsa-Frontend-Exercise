@@ -21,18 +21,21 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import FormInput from '../components/custom/FormInput';
 import { userValidationSchema } from './../../utils/validation';
 import {
+  CoordinateType,
   IUserModel,
   IUserRequestModel,
   userInitialValue,
 } from '../models/user';
-import { useUsersSlice } from './User/slice';
+import { actions } from './User/slice';
+import * as Permissions from 'expo-permissions';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUser } from './User/slice/selectors';
+import { selectIscreateAccount, selectUser } from './User/slice/selectors';
 
 export default function SignUpScreen() {
   const navigation = useNavigation();
-  const { actions } = useUsersSlice();
-  // const userData = useSelector(selectUser);
+  const isCreateAccount = useSelector(selectIscreateAccount);
+  const user = useSelector(selectUser);
+  const [location, setLocation] = useState<CoordinateType>(null);
 
   const dispatch = useDispatch();
 
@@ -54,21 +57,31 @@ export default function SignUpScreen() {
     return { firstName, lastName };
   }
 
-  useEffect(() => {
-    async function getCurrentLocation() {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-
-      if (status !== 'granted') {
-        Alert('Permission to access location was denied');
-        return undefined;
-      }
-      handleSubmit();
-
-      const location = await Location.getCurrentPositionAsync({});
-      return location;
+  // Request location permissions
+  const requestLocationPermissions = async () => {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      console.log('Location permission not granted');
     }
-    getCurrentLocation();
-  }, []);
+  };
+
+  // Get current location
+  const getCurrentLocation = async () => {
+    await requestLocationPermissions();
+
+    const { coords } = await Location.getCurrentPositionAsync({});
+    setLocation({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
+  };
+
+  useEffect(() => {
+    if (isCreateAccount && user?.token) {
+      navigation.navigate('Root');
+    }
+    // getCurrentLocation();
+  }, [isCreateAccount, user]);
 
   return (
     <View style={styles.container}>
@@ -95,9 +108,8 @@ export default function SignUpScreen() {
         onSubmit={(values: IUserModel | IUserRequestModel) => {
           const { firstName, lastName } = parseFullName(values?.fullName);
           const { fullName, confirmPassword, ...restValues } = values;
-          console.log('firstname', firstName, lastName);
           const updateObject = { ...restValues, firstName, lastName };
-          dispatch(actions.addUser(updateObject as IUserRequestModel));
+          dispatch(actions.createUser(updateObject as IUserModel));
           // navigation.navigate('Root');
         }}
       >
@@ -153,6 +165,7 @@ export default function SignUpScreen() {
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
                     value={values.password}
+                    secureTextEntry
                     placeholder="Enter Password"
                   />
                   {touched.password && errors.password && (
@@ -164,6 +177,7 @@ export default function SignUpScreen() {
                     onChangeText={handleChange('confirmPassword')}
                     onBlur={handleBlur('confirmPassword')}
                     value={values.confirmPassword}
+                    secureTextEntry
                     placeholder="Enter Password"
                   />
                   {touched.confirmPassword && errors.confirmPassword && (
@@ -184,6 +198,7 @@ export default function SignUpScreen() {
 
                   <View style={styles.checkboxContainer}>
                     <Text style={styles.checkboxLabel}>Are you a buyer?</Text>
+                    {/* @ts-ignore */}
                     <Switch
                       style={styles.switch}
                       value={values.isBuyer}
@@ -191,21 +206,33 @@ export default function SignUpScreen() {
                     />
                   </View>
 
-                  <Text style={styles.label}>Address</Text>
+                  <FormInput
+                    label="Address"
+                    onChangeText={handleChange('address')}
+                    onBlur={handleBlur('address')}
+                    value={values.address}
+                    placeholder="Enter Your Address"
+                  />
 
+                  {touched.address && errors.address && (
+                    <Text style={styles.error}>{errors.address}</Text>
+                  )}
+
+                  {/* 
+                  <Text style={styles.label}>Address</Text>
                   <GooglePlacesAutocomplete
                     placeholder="Type a place"
                     onPress={(data, details = null) => {
                       setFieldValue('address', details?.formatted_address);
                       console.log(data, details);
                     }}
-                    query={{ key: 'API Key' }}
+                    query={{ key: 'API KEY' }}
                     fetchDetails={true}
                     onFail={error => console.log(error)}
                     onNotFound={() => console.log('no results')}
                     currentLocation={true}
                     currentLocationLabel="Your location!" // add a simple label
-                  />
+                  /> */}
 
                   <TouchableOpacity
                     style={[

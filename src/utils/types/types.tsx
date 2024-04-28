@@ -23,14 +23,22 @@ export type RootStackParamList = {
   Login: undefined;
   Welcome: undefined;
   SignUp: undefined;
+  UserDetail: undefined;
+  UserEdit: undefined;
+};
+
+export type UserRootStackParamList = {
+  UserDetail: undefined;
+  UserEdit: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  editProfile: undefined;
+  userProfile: undefined;
   homePage: undefined;
+
   // [INSERT NEW SCREEN KEY ABOVE] < Needed for generating screen
 };
 

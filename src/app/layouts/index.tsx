@@ -18,9 +18,10 @@ import { StyleSheet, View } from 'react-native';
 import { Dimensions } from 'react-native';
 import { Snackbar } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { useApplicationsDefaultSlice } from './ApplicationDefaults/slice';
+import { hideAppMessage, setAppMessage } from './ApplicationDefaults/slice';
 import { selectAppMessage } from '././ApplicationDefaults/slice/selectors';
 import { IAppMessageSeverities } from './ApplicationDefaults/slice/types';
+import { lightTheme } from '../../utils/theme/lightTheme';
 
 interface IconConfig {
   name: string;
@@ -50,8 +51,8 @@ const getIconConfigByAppMessageSeverity = (
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ApplicationDefaults(props: Props) {
   const theme = useTheme();
-  const { actions } = useApplicationsDefaultSlice();
   const dispatch = useDispatch();
+
   const appMessageState = useSelector(selectAppMessage);
   const appMessageSeverity = appMessageState?.severity || 'info';
   const iconConfig = getIconConfigByAppMessageSeverity(appMessageSeverity);
@@ -63,7 +64,7 @@ export function ApplicationDefaults(props: Props) {
   );
 
   const onCloseAppMessage = () => {
-    dispatch(actions.hideAppMessage());
+    dispatch(hideAppMessage());
   };
 
   return (
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
 
   dismissButton: {
     marginTop: 10,
+    backgroundColor: lightTheme.colors.primary,
   },
   iconContainer: {
     display: 'flex',
