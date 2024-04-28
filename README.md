@@ -28,11 +28,11 @@ currentLocationLabel="Your location!" // add a simple label
 
 1. React Native with Expo
 2. Redux and (Redux ToolKit)
-
-- Redux Saga
-- Redux injectors
-
+  - Redux Saga
+  - Redux injectors
 3. Typescript
 4. Redux-saga
-5. Lazy load slice with Redux injectors
-6. google place Auto complete
+5. Formik For Handling State
+6. Data Validation I was using Yup
+7. Lazy load slice with Redux injectors
+8. google place Auto complete
