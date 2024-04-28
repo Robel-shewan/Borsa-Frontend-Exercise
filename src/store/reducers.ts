@@ -1,23 +1,16 @@
+import { combineReducers } from '@reduxjs/toolkit';
+import userReducer from '../app/screens/User/slice';
+import applicationsDefaultReducer from '../app/layouts/ApplicationDefaults/slice/index';
+
 /**
  * Combine all reducers in this file and export the combined reducers.
  */
 
-import { combineReducers } from '@reduxjs/toolkit';
+const rootReducer = combineReducers({
+  user: userReducer,
+  applicationsDefault: applicationsDefaultReducer,
+});
 
-import { InjectedReducersType } from 'utils/types/injector-typings';
+export type RootState = ReturnType<typeof rootReducer>;
 
-/**
- * Merges the main reducer with the router state and dynamically injected reducers
- */
-export function createReducer(injectedReducers: InjectedReducersType = {}) {
-  // Initially we don't have any injectedReducers, so returning identity function to avoid the error
-
-  console.log('with the applicaton', injectedReducers);
-  if (Object.keys(injectedReducers).length === 0) {
-    return (state: any) => state;
-  } else {
-    return combineReducers({
-      ...injectedReducers,
-    });
-  }
-}
+export default rootReducer;

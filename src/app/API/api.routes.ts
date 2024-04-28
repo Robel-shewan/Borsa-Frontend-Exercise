@@ -5,9 +5,10 @@ const bases = 'http://143.198.168.244:3000/api/users';
 
 const user = {
   createAccount: `${bases}/register/v2`,
-  login: `${bases}/login/fieldOfficer`,
-  getAccount: `${bases}/account`,
-  updatePassword: `${bases}/update-account/fieldOfficer`,
+  login: `${bases}/login`,
+  updateUser: `${bases}/profile`,
+  getUser: `${bases}`,
+  getAllUsers: `${bases}/fetch/dummy/user-v2`,
 };
 
 const routes = {

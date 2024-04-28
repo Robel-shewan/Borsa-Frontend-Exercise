@@ -22,6 +22,7 @@ import {
   RootStackParamList,
   RootTabParamList,
   RootTabScreenProps,
+  UserRootStackParamList,
 } from '../../utils/types/types';
 import LinkingConfiguration from './LinkingConfiguration';
 import WelcomeScreen from './../screens/WelcomeScreen';
@@ -29,6 +30,8 @@ import HomePageScreen from './../screens/HomePageScreen';
 import EditProfileScreen from './../screens/EditProfileScreen';
 import useColorScheme from '../../utils/hooks/useColorScheme';
 import Colors from '../../utils/constants/Colors';
+import UserScreenDetail from '../screens/UserDetailScreen';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Navigation({
   colorScheme,
@@ -104,19 +107,44 @@ function BottomTabNavigator() {
         component={HomePageScreen}
         options={({ navigation }: RootTabScreenProps<'homePage'>) => ({
           title: 'Home Page',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         })}
       />
 
       <BottomTab.Screen
-        name="editProfile"
-        component={EditProfileScreen}
-        options={({ navigation }: RootTabScreenProps<'editProfile'>) => ({
-          title: 'Home Page',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="userProfile"
+        component={UserNavigator}
+        options={({ navigation }: RootTabScreenProps<'userProfile'>) => ({
+          title: 'User Profile',
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="person" color={color} size={40} />
+          ),
         })}
       />
     </BottomTab.Navigator>
+  );
+}
+
+/**
+ * A root stack navigator is often used for displaying modals on top of all other content.
+ * https://reactnavigation.org/docs/modal
+ */
+const UserStack = createNativeStackNavigator<UserRootStackParamList>();
+
+function UserNavigator() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="UserDetail"
+        component={UserScreenDetail}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UserEdit"
+        component={EditProfileScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   );
 }
 

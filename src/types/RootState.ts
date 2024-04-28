@@ -1,4 +1,4 @@
-import { ApplicationsDefaultState } from 'app/layouts/ApplicationDefaults/slice/types';
+import { ApplicationsDefaultState } from './../app/layouts/ApplicationDefaults/slice/types';
 import { IUserInitialState } from './../app/screens/User/slice/types';
 
 /* 

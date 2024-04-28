@@ -12,7 +12,7 @@ export default function WelcomeScreen(props: WelcomeScreenProps) {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#007BFF' }}>
       <View
-        style={{ flex: 1, justifyContent: 'space-around', marginVertical: 4 }}
+        style={{ flex: 1, justifyContent: 'space-around', marginVertical: 40 }}
       >
         <Text
           style={{

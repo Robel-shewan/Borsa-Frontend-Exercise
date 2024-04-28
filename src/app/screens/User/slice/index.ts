@@ -5,14 +5,21 @@ import {
 } from '../../../../utils/redux-injectors';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '../../../../utils/@reduxjs/toolkit';
-import { usersSaga } from './saga';
-import { IUserInitialState, IUserResponse } from './types';
+import {
+  IEditProfilePayload,
+  IUserFilterPayload,
+  IUserInitialState,
+  IUserResponse,
+} from './types';
 import { IUserModel, IUserRequestModel } from 'app/models/user';
 
 export const initialState: IUserInitialState = {
   isLoading: false,
   isCreateAccount: false,
+  isUpdateSuccess: false,
   isLogin: false,
+  page: 1,
+  hasMore: true,
   user: {
     _id: '',
     address: '',
@@ -24,14 +31,21 @@ export const initialState: IUserInitialState = {
     password: '',
     profilePic: '',
   },
+  users: [],
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    addUser(state, action: PayloadAction<IUserRequestModel>) {
+    createUser(state, action: PayloadAction<IUserRequestModel>) {
       state.isLoading = true;
+    },
+    setIsCreateAccount(state, action: PayloadAction<boolean>) {
+      state.isCreateAccount = action.payload;
+    },
+    setUser(state, action: PayloadAction<IUserModel>) {
+      state.user = action.payload;
     },
     loginUser(
       state,
@@ -39,19 +53,36 @@ export const userSlice = createSlice({
     ) {
       state.isLogin = true;
     },
-    isLoginUser(state, action: PayloadAction<boolean>) {
-      state.isLogin = true;
+    setIsSigningIn(state, action: PayloadAction<boolean>) {
+      state.isLogin = action.payload;
     },
-    iscreateAccount(state, action: PayloadAction<boolean>) {
-      state.isCreateAccount = true;
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+    updateUser(state, action: PayloadAction<IEditProfilePayload>) {
+      state.isLoading = true;
+    },
+    setIsUpdateSuccess(state, action: PayloadAction<boolean>) {
+      state.isUpdateSuccess = true;
+    },
+
+    getUser(state, action: PayloadAction<string>) {
+      state.isLoading = true;
+    },
+    getAllUsers(state, action: PayloadAction<IUserFilterPayload>) {
+      state.isLoading = true;
+    },
+    setAllUsers(state, action: PayloadAction<IUserModel[]>) {
+      state.users = [...state.users, ...action.payload];
+      state.page = state.page + 1;
+      state.hasMore = action.payload.length > 0;
+      state.isLoading = false;
+    },
+    fetchFailure(state, action) {
+      state.isLoading = false;
     },
   },
 });
 
-export const { actions: userActions } = userSlice;
-
-export const useUsersSlice = () => {
-  useInjectReducer({ key: userSlice.name, reducer: userSlice.reducer });
-  useInjectSaga({ key: userSlice.name, saga: usersSaga });
-  return { actions: userSlice.actions };
-};
+export const { actions } = userSlice;
+export default userSlice.reducer;

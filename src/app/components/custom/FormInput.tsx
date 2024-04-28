@@ -8,6 +8,7 @@ const FormInput: React.FC<FormInputProps> = ({
   onBlur,
   value,
   placeholder,
+  ...rest
 }) => {
   return (
     <View style={styles.container}>
@@ -18,6 +19,7 @@ const FormInput: React.FC<FormInputProps> = ({
         onBlur={onBlur}
         value={value}
         placeholder={placeholder}
+        {...rest}
       />
     </View>
   );
