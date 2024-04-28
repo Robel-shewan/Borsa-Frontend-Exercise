@@ -21,6 +21,7 @@ currentLocation={true}
 currentLocationLabel="Your location!" // add a simple label
 />
 
+
 # some of the Technology and architecture I was using
 
 1. React Native with Expo
