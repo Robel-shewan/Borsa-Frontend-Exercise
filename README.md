@@ -1,9 +1,11 @@
 # Borsa Frontend Exercise
 
-![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot%20from%202024-04-25%2009-45-43.png)
-![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot%20from%202024-04-25%2009-46-02.png)
-![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot%20from%202024-04-25%2009-47-20.png)
-![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot%20from%202024-04-25%2009-48-40.png)
+![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 07-51-06.png)
+![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 08-00-32.png)
+![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 08-02-53.png)
+![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 08-03-20.png)
+[final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 08-03-41.png)
+![final](https://github.com/Robel-shewan/Borsa-Frontend-Exercise/blob/main/src/assets/images/Screenshot from 2024-04-28 08-03-49.png)
 
 For the google Place Autocomplete you must adding the google map API_KEY
 

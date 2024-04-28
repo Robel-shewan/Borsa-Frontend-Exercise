@@ -36,3 +36,9 @@ export const userLoginValidationSchema = Yup.object().shape({
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters long'),
 });
+
+export const ProfileEditValidationSchema = Yup.object().shape({
+  firstName: Yup.string(),
+  lastName: Yup.string(),
+  email: Yup.string().email('Invalid email'),
+});
